@@ -37,3 +37,7 @@ knitr::kable(model$SV, format="markdown")
 plot(model, ABpoints)
 ```
 
+We can also see the *decision boundary* ($\rho$) also known as the margin:
+```{r}
+model$rho
+```
