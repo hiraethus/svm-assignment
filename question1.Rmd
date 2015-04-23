@@ -15,9 +15,24 @@ output: pdf_document
 *Plot them and find the optimal separating line. What are the support vectors, and what is the*
 *margin?*
 
-```{r}
+```{r, echo=FALSE}
+library(knitr)
 ```
 
-```{r, echo=FALSE}
+```{r}
+library("e1071")
+ABpoints <- read.table("ABpoints.tab", header=T)
+
+model <- svm(group~., data=ABpoints, kernel="linear", scale = F)
+```
+
+The reason we use `scale = F` is because we want to find the scalar vector values without them having been scaled:
+```{r}
+support.vectors <- model$SV
+knitr::kable(model$SV, format="markdown")
+```
+
+```{r}
+plot(model, ABpoints)
 ```
 
