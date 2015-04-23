@@ -23,7 +23,8 @@ library(knitr)
 library("e1071")
 ABpoints <- read.table("ABpoints.tab", header=T)
 
-model <- svm(group~., data=ABpoints, kernel="linear", scale = F)
+model <- e1071::svm(group~., data=ABpoints, type="C-classification",
+                    kernel="radial", scale = F)
 ```
 
 The reason we use `scale = F` is because we want to find the scalar vector values without them having been scaled:
