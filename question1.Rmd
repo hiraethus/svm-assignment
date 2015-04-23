@@ -48,17 +48,35 @@ rm(list=ls())
 *Using the SVM R package “e1071”, Apply SVM classification to the AML vs MDS gene*
 *expression datasets.*
 
-## Dataset 207
+**Dataset 207**
+
 *File “set207-MDS84.tab” contains the expression values of 25*
 *key genes of 84 MDS patients*
 
 *File “set207-AML93.tab” contains the expression values of 25*
 *key genes of 93 AML patients.*
 
-## Dataset 228
+**Dataset 228**
+
 *Files for this datasets contain similar data as indicated by their file names.*
 
 *In your analysis, use one dataset as the training set, and then apply the trained model to make*
 *prediction on the other dataset.*
 *Write a brief report on your analysis of the datasets: eg., Explain your choices of parameters and*
 *what is the accuracy of your prediction, etc.*
+
+Given our datasets, let's see how many patients are in each set. We take away the first two 
+columns which are the `uniqueID` and `tables_count` columns.
+
+```{r}
+num.patients <- sapply(X=dir(pattern = "set*"), FUN=function(X) {
+  ncol(read.table(X)[,c(-1,-2)])
+})
+knitr::kable(as.data.frame(num.patients), format="markdown")
+```
+
+We will use **Dataset 207** as our training data set. In order to use the `e1071::svm` command with our data, we first need to transform our data into a data frame. The data frame will contain a row 
+for each patient with columns for each of the probe IDs and a further column indicating whether the 
+patient is labeled as having *AML* and *MDA*. The same will be done for loading the test data.
+
+## Loading Dataset 207 into a data.frame
