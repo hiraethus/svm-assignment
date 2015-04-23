@@ -80,3 +80,31 @@ for each patient with columns for each of the probe IDs and a further column ind
 patient is labeled as having *AML* and *MDA*. The same will be done for loading the test data.
 
 ## Loading Dataset 207 into a data.frame
+First, let's load the `set207-AML93` data set into a data.frame
+```{r}
+set207.AML93 <- read.table(file="set207-AML93.tab", header=T)
+knitr::kable(head(set207.AML93), format="markdown")
+```
+
+Next, we remove `uniqueID` and `tables_count` columns, but first saving the uniqueIDs (the probeset 
+IDs) in a separate vector.
+
+```{r}
+probe.ids <- as.vector(set207.AML93$uniqueID)
+set207.AML93 <- set207.AML93[,-c(1,2)]
+```
+
+Having done this, we can transpose the table using the `t()` command
+```{r}
+set207.AML93 <- t(set207.AML93)
+```
+
+We then add the names of the probe IDs as column names:
+```{r}
+colnames(set207.AML93) <- probe.ids
+```
+
+We then add an extra column to show that each of the patients is labeled as having AML:
+```{r}
+set207.AML93 <- data.frame(set207.AML93, "AML")
+```
