@@ -127,3 +127,31 @@ All that remains to load *Dataset 207* is to bind the `set207.AML93` dataset wit
 ```{r}
 set207 <- rbind(set207.AML93, set207.MDS84)
 ```
+
+# Loading Dataset 228 into a dataframe
+`set207` will be used to train our Support Vector Machine (SVM) such that we can give it unlabeled data points that the machine 
+will classify as either being part of the `AML` or `MDS` group. Before we can do this, we need to use a testing set of data which is 
+also labeled data that we can run through the algorithm and check whethe they have been classified correctly.
+
+`set228` will be used as the testing set of data. Let's first load *Dataset 228* into a dataframe like we created above for Dataset 207.
+
+```{r}
+set228.AML109 <- read.table(file="set228-AML109.tab", header=T)
+set228.AML109 <- set228.AML109[,-c(1,2)]
+
+set228.AML109 <- t(set228.AML109)
+
+set228.AML109 <- data.frame("AML", set228.AML109)
+colnames(set228.AML109) <- c("group", probe.ids)
+
+# TODO same for set228.MDS80...
+set228.MDS80 <- read.table(file="set228-MDS80.tab", header=T)
+set228.MDS80 <- set228.MDS80[,-c(1,2)]
+
+set228.MDS80 <- t(set228.MDS80)
+
+set228.MDS80 <- data.frame("MDS", set228.MDS80)
+colnames(set228.MDS80) <- c("group", probe.ids)
+
+set228 <- rbind(set228.AML109, set228.MDS80)
+```
