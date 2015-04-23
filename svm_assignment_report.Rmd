@@ -107,3 +107,23 @@ colnames(set207.AML93) <- c("group", probe.ids)
 
 knitr::kable(head(set207.AML93)[,1:4], format="markdown")
 ```
+
+Further to this, we do exactly the same for `set207.MDS84` dataset. (Note we *can* use the `probe.ids` vector from before to generate 
+to name the columns.)
+
+```{r}
+set207.MDS84 <- read.table(file="set207-MDS84.tab", header=T)
+set207.MDS84 <- set207.MDS84[,-c(1,2)]
+
+set207.MDS84 <- t(set207.MDS84)
+
+set207.MDS84 <- data.frame("MDS", set207.MDS84)
+colnames(set207.MDS84) <- c("group", probe.ids)
+
+knitr::kable(head(set207.MDS84)[,1:4], format="markdown")
+```
+
+All that remains to load *Dataset 207* is to bind the `set207.AML93` dataset with `set207.MDS84`.
+```{r}
+set207 <- rbind(set207.AML93, set207.MDS84)
+```
