@@ -24,7 +24,7 @@ model <- e1071::svm(group~., data=ABpoints, type="C-classification",
                     kernel="radial", scale = F)
 ```
 
-The reason we use `scale = F` is because we want to find the scalar vector values without them having been scaled:
+The reason we use `scale = F` is because we want to find the suppor vector values without them having been scaled:
 ```{r}
 support.vectors <- model$SV
 knitr::kable(model$SV, format="markdown")
@@ -79,7 +79,7 @@ We will use **Dataset 207** as our training data set. In order to use the `e1071
 for each patient with columns for each of the probe IDs and a further column indicating whether the 
 patient is labeled as having *AML* and *MDA*. The same will be done for loading the test data.
 
-## Loading Dataset 207 into a data.frame
+## Loading Dataset 207 into a dataframe
 First, let's load the `set207-AML93` data set into a data.frame
 ```{r}
 set207.AML93 <- read.table(file="set207-AML93.tab", header=T)
