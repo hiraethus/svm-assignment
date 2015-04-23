@@ -15,11 +15,8 @@ output: pdf_document
 *Plot them and find the optimal separating line. What are the support vectors, and what is the*
 *margin?*
 
-```{r, echo=FALSE}
-library(knitr)
-```
-
 ```{r}
+library(knitr)
 library("e1071")
 ABpoints <- read.table("ABpoints.tab", header=T)
 
@@ -41,3 +38,27 @@ We can also see the *decision boundary* ($\rho$) also known as the margin:
 ```{r}
 model$rho
 ```
+
+```{r, echo=FALSE}
+# clear the environment
+rm(list=ls())
+```
+
+# Problem 2
+*Using the SVM R package “e1071”, Apply SVM classification to the AML vs MDS gene*
+*expression datasets.*
+
+## Dataset 207
+*File “set207-MDS84.tab” contains the expression values of 25*
+*key genes of 84 MDS patients*
+
+*File “set207-AML93.tab” contains the expression values of 25*
+*key genes of 93 AML patients.*
+
+## Dataset 228
+*Files for this datasets contain similar data as indicated by their file names.*
+
+*In your analysis, use one dataset as the training set, and then apply the trained model to make*
+*prediction on the other dataset.*
+*Write a brief report on your analysis of the datasets: eg., Explain your choices of parameters and*
+*what is the accuracy of your prediction, etc.*
