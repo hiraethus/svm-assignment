@@ -200,3 +200,43 @@ plot(performance, col="green", lty=2, lwd=2)
 abline(0,1, col = "red", lty=5, lwd=2)
 ```
 <!-- Explain what ROC curve is all about - green line how much better than random (red line) our SVM is -->
+
+The green line shows how much better the SVM is at determining the class of a case (green dotted line) as opposed to a 
+random guess (shown by the red dotted line).
+
+## Tuning the SVM
+We can look at tuning the SVM using *k-fold cross validation* which is in-built into the `e1071` implementation. 
+K-fold cross validation involves partitioning the training data into k equally sized subsamples. The method will 
+compute values for \gamma (gamma) and C (cost) and ultimately determine a best fit model for us.
+
+```{r}
+tuned.svm <- tune.svm(group ~ ., data = training.set, cross = 50)
+gamma <- tuned.svm$best.model$gamma
+cost <- tuned.svm$best.model$cost
+
+gamma
+cost
+```
+
+Due to the k-fold cross validation then, the values converged upon for gamma and cost were 0.04 and 1 respectively. 
+Using these values to generate another SVM we can genrate another prediction table to compare its performance to
+our previous SVM.
+
+```{r}
+best.svm <- svm(group ~ ., data = training.set, cosr = cost, gamma = gamma)
+best.pred <- predict(best.svm, test.set[,-1])
+best.prediction.tab <- table(pred = best.pred, true = test.set[,1])
+best.prediction.tab
+```
+
+We can also compare the performance of our k-fold cross validated svm by plotting it against our original SVM on a ROC graph.
+
+```{r}
+pred.best <- ROCR::prediction(list(as.numeric(best.pred)), labels =  list(as.numeric(test.set[,1])))
+performance.best <- performance(pred.best, measure="tpr", x.measure="fpr")
+plot(performance, col="green", lty=2, lwd=2)
+par(new=T)
+plot(performance.best, col="orange", lty=2, lwd=2)
+
+abline(0,1, col = "red", lty=5, lwd=2)
+```
