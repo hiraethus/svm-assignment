@@ -2,7 +2,7 @@
 title: "Support Vector Machine Assignment"
 author: "Michael J. Jones"
 date: "23/04/2015"
-output: pdf_document
+output: html_document
 ---
 
 # Problem 1
@@ -128,7 +128,7 @@ All that remains to load *Dataset 207* is to bind the `set207.AML93` dataset wit
 set207 <- rbind(set207.AML93, set207.MDS84)
 ```
 
-# Loading Dataset 228 into a dataframe
+## Loading Dataset 228 into a dataframe
 `set207` will be used to train our Support Vector Machine (SVM) such that we can give it unlabeled data points that the machine 
 will classify as either being part of the `AML` or `MDS` group. Before we can do this, we need to use a testing set of data which is 
 also labeled data that we can run through the algorithm and check whethe they have been classified correctly.
