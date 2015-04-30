@@ -155,3 +155,48 @@ colnames(set228.MDS80) <- c("group", probe.ids)
 
 set228 <- rbind(set228.AML109, set228.MDS80)
 ```
+
+## Training the SVM
+
+As aformentioned we will use `set207` as our training set and `set228` as our test data set.
+
+```{r}
+training.set <- set207
+test.set <- set228
+```
+
+Here, we train our svm with the training set, assuming group is our dependent variable and all other variables are 
+explanatory variables.
+
+Next we train our SVM using our training set of data:
+```{r}
+svm.model <- svm(group ~ ., data = training.set)
+```
+
+And then, using our test data, we predict whether our test data belongs to either the `AML` or `MDS` class. (Note that 
+we exclude column 1 of the `test.set` which is the column that labels whether these records are `AML` or `MDS`)
+
+```{r}
+set207.pred <- predict(svm.model, test.set[,-1])
+```
+
+We can construct a table to demonstrate the performance of our SVM showing the counts of true predictions against 
+false predicitons of the classification of our data:
+
+```{r}
+prediction.tab <- table(pred = set207.pred, true = test.set[,1])
+prediction.tab
+```
+
+We can observe from the table that the SVM we created performed quite well. We can visualise these results with the 
+R package `ROCR` by drawing a ROC (Receiver Operating Characteristics) curve.
+
+<!-- ROCR STUFF -->
+```{r}
+library(ROCR)
+pred <- ROCR::prediction(list(as.numeric(set207.pred)), labels =  list(as.numeric(test.set[,1])))
+performance <- performance(pred, measure="tpr", x.measure="fpr")
+plot(performance, col="green", lty=2, lwd=2)
+abline(0,1, col = "red", lty=5, lwd=2)
+```
+<!-- Explain what ROC curve is all about - green line how much better than random (red line) our SVM is -->
