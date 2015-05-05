@@ -2,7 +2,7 @@
 title: "Support Vector Machine Assignment"
 author: "Michael J. Jones"
 date: "23/04/2015"
-output: html_document
+output: pdf_document
 ---
 
 # Problem 1
@@ -21,7 +21,7 @@ library("e1071")
 ABpoints <- read.table("ABpoints.tab", header=T)
 
 model <- e1071::svm(group~., data=ABpoints, type="C-classification",
-                    kernel="linear", scale = F)
+                    kernel="linear", scale = F, cost=10)
 ```
 
 The reason we use `scale = F` is because we want to find the suppor vector values without them having been scaled:
@@ -34,10 +34,19 @@ knitr::kable(model$SV, format="markdown")
 plot(model, ABpoints)
 ```
 
-We can also see the *decision boundary* ($\rho$) also known as the margin:
+We can calculate the margin to our hyperplane by first calculating the weight vector, **w**
 ```{r}
-model$rho
+w <- t(model$coefs) %*% model$SV;
+kable(w, format="markdown")
 ```
+
+Knowing the margin is equal to $\frac{2}{||w||}$, we can calculate the margin as
+
+```{r}
+2 / norm(w)
+```
+
+
 
 ```{r, echo=FALSE}
 # clear the environment
@@ -207,7 +216,7 @@ random guess (shown by the red dotted line).
 ## Tuning the SVM
 We can look at tuning the SVM using *k-fold cross validation* which is in-built into the `e1071` implementation. 
 K-fold cross validation involves partitioning the training data into k equally sized subsamples. The method will 
-compute values for \gamma (gamma) and C (cost) and ultimately determine a best fit model for us.
+compute values for $\gamma$ (gamma) and C (cost) and ultimately determine a best fit model for us.
 
 ```{r}
 tuned.svm <- tune.svm(group ~ ., data = training.set, cross = 50)
