@@ -179,7 +179,7 @@ explanatory variables.
 
 Next we train our SVM using our training set of data:
 ```{r}
-svm.model <- svm(group ~ ., data = training.set)
+svm.model <- svm(group ~ ., data = training.set, kernel="sigmoid")
 ```
 
 And then, using our test data, we predict whether our test data belongs to either the `AML` or `MDS` class. (Note that 
@@ -219,7 +219,7 @@ K-fold cross validation involves partitioning the training data into k equally s
 compute values for $\gamma$ (gamma) and C (cost) and ultimately determine a best fit model for us.
 
 ```{r}
-tuned.svm <- tune.svm(group ~ ., data = training.set, cross = 50)
+tuned.svm <- tune.svm(group ~ ., data = training.set, sampling="cross", cross=50, kernel="sigmoid")
 gamma <- tuned.svm$best.model$gamma
 cost <- tuned.svm$best.model$cost
 
@@ -232,13 +232,13 @@ Using these values to generate another SVM we can genrate another prediction tab
 our previous SVM.
 
 ```{r}
-best.svm <- svm(group ~ ., data = training.set, cosr = cost, gamma = gamma)
+best.svm <- svm(group ~ ., data = training.set, cost = cost, gamma = gamma)
 best.pred <- predict(best.svm, test.set[,-1])
 best.prediction.tab <- table(pred = best.pred, true = test.set[,1])
 best.prediction.tab
 ```
 
-We can also compare the performance of our k-fold cross validated svm by plotting it against our original SVM on a ROC graph.
+The tuned SVM using k-fold cross validation performs marginally better than the default. We can also compare the performance of our k-fold cross validated svm by plotting it against our original SVM on a ROC graph.
 
 ```{r}
 pred.best <- ROCR::prediction(list(as.numeric(best.pred)), labels =  list(as.numeric(test.set[,1])))
